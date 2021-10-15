@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
+  debugPaintSizeEnabled = true;
   runApp(MyApp());
 }
 
@@ -8,8 +10,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // var list = ["todo!","todo!","todo!","todo!","todo!","todo!"];
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Todo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -22,11 +25,97 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('todo'),
+        ),
+        body: TodoMain(),
+        /*body: ListView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            if (index >= list.length) {
+              list.addAll(["todo_add", "todo_add"]);
+            }
+            return _menuItem(list[index]);
+          }
+        ),*/
+      ),
+    );
+  }
+  /*
+  Widget _menuItem(String title) {
+    return Container(
+      decoration: new BoxDecoration(
+        border: new Border(bottom: BorderSide(width:1.0, color: Colors.grey))
+      ),
+      child: ListTile(
+        title:  Text(
+          title,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18.0
+          ),
+        ),
+        onTap: (){
+          print("ontap called.");
+        },
+        onLongPress: (){
+          print("on long tap called");
+        },
+      )
+    );
+  }
+  */
+}
+class TodoMain extends StatefulWidget {
+  @override
+  _TodoMainState createState() => _TodoMainState();
+}
+
+class _TodoMainState extends State<TodoMain> {
+  var list = [];
+
+  void _addTodo() {
+    setState(() {
+      list.add("todo!!!");
+    });
+  }
+  
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(child: titlelist()),
+        FloatingActionButton(
+          onPressed: _addTodo,
+          child: Icon(Icons.add),
+        )
+      ],
+    );
+  }
+  Widget titlelist() {
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, int idx) {
+        return showlist(list[idx]);
+      }
+    );
+  }
+  Widget showlist(String title) {
+    return Container(
+      decoration: new BoxDecoration(
+        border: new Border(bottom: BorderSide(color: Colors.grey, width: 3))
+      ),
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black
+          ),
+        ),
+      ),
     );
   }
 }
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
