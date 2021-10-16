@@ -73,10 +73,16 @@ class TodoMain extends StatefulWidget {
 
 class _TodoMainState extends State<TodoMain> {
   var list = [];
+  var todoTitle;
 
   void _addTodo() {
     setState(() {
       list.add("todo!!!");
+    });
+  }
+  void _addTodoTitle(String title) {
+    setState(() {
+      list.add(title);
     });
   }
   
@@ -84,10 +90,11 @@ class _TodoMainState extends State<TodoMain> {
     return Column(
       children: [
         Expanded(child: titlelist()),
+        addtext(),
         FloatingActionButton(
           onPressed: _addTodo,
           child: Icon(Icons.add),
-        )
+        ),
       ],
     );
   }
@@ -113,6 +120,30 @@ class _TodoMainState extends State<TodoMain> {
           ),
         ),
       ),
+    );
+  }
+  Widget addtext() {
+    return Container(
+      child: Column (
+        children: [
+          TextField(
+            enabled: true,
+            onChanged: (text) {
+              todoTitle = text;
+            }
+          ),
+          ElevatedButton(
+            onPressed: () => _addTodoTitle(todoTitle),
+            child: const Text(
+              "登録",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0
+              ),
+            ),
+            )
+        ],
+      )
     );
   }
 }
