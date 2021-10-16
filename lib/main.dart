@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -66,6 +68,7 @@ class MyApp extends StatelessWidget {
   }
   */
 }
+
 class TodoMain extends StatefulWidget {
   @override
   _TodoMainState createState() => _TodoMainState();
@@ -73,6 +76,7 @@ class TodoMain extends StatefulWidget {
 
 class _TodoMainState extends State<TodoMain> {
   var list = [];
+  var flagList = [];
   var todoTitle;
 
   void _addTodo() {
@@ -80,12 +84,14 @@ class _TodoMainState extends State<TodoMain> {
       list.add("todo!!!");
     });
   }
+
   void _addTodoTitle(String title) {
     setState(() {
       list.add(title);
+      flagList.add(false);
     });
   }
-  
+
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -98,55 +104,61 @@ class _TodoMainState extends State<TodoMain> {
       ],
     );
   }
+
   Widget titlelist() {
     return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (BuildContext context, int idx) {
-        return showlist(list[idx]);
-      }
-    );
+        itemCount: list.length,
+        itemBuilder: (BuildContext context, int idx) {
+          return showlist(list[idx], idx);
+        });
   }
-  Widget showlist(String title) {
+
+  Widget showlist(String title, int idx) {
     return Container(
       decoration: new BoxDecoration(
-        border: new Border(bottom: BorderSide(color: Colors.grey, width: 3))
-      ),
-      child: ListTile(
+          border: new Border(bottom: BorderSide(color: Colors.grey, width: 3))),
+      child: CheckboxListTile(
         title: Text(
           title,
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.black
-          ),
+          style: (flagList[idx])
+              ? TextStyle(
+                  decoration: TextDecoration.lineThrough,
+                  fontSize: 20,
+                  color: Colors.black)
+              : TextStyle(fontSize: 20, color: Colors.black),
         ),
+        controlAffinity: ListTileControlAffinity.leading,
+        value: flagList[idx],
+        onChanged: (value) {
+          setState(() {
+            flagList[idx] = value;
+          });
+        },
       ),
     );
   }
+
   Widget addtext() {
     return Container(
-      child: Column (
-        children: [
-          TextField(
+        child: Column(
+      children: [
+        TextField(
             enabled: true,
             onChanged: (text) {
               todoTitle = text;
-            }
+            }),
+        ElevatedButton(
+          onPressed: () => _addTodoTitle(todoTitle),
+          child: const Text(
+            "登録",
+            style: TextStyle(color: Colors.white, fontSize: 20.0),
           ),
-          ElevatedButton(
-            onPressed: () => _addTodoTitle(todoTitle),
-            child: const Text(
-              "登録",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0
-              ),
-            ),
-            )
-        ],
-      )
-    );
+        )
+      ],
+    ));
   }
 }
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
