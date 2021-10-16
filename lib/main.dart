@@ -94,7 +94,7 @@ class _TodoMainState extends State<TodoMain> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(child: titlelist()),
+        titlelist(),
         addtext(),
         FloatingActionButton(
           onPressed: _addTodo,
