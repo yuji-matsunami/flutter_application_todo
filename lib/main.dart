@@ -66,6 +66,7 @@ class MyApp extends StatelessWidget {
   }
   */
 }
+
 class TodoMain extends StatefulWidget {
   @override
   _TodoMainState createState() => _TodoMainState();
@@ -73,13 +74,15 @@ class TodoMain extends StatefulWidget {
 
 class _TodoMainState extends State<TodoMain> {
   var list = [];
+  var flagList = [];
 
   void _addTodo() {
     setState(() {
       list.add("todo!!!");
+      flagList.add(false);
     });
   }
-  
+
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -91,31 +94,38 @@ class _TodoMainState extends State<TodoMain> {
       ],
     );
   }
+
   Widget titlelist() {
     return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (BuildContext context, int idx) {
-        return showlist(list[idx]);
-      }
-    );
+        itemCount: list.length,
+        itemBuilder: (BuildContext context, int idx) {
+          return showlist(list[idx], idx); //flagを直接渡すと書き換えられなかったためidを渡してshowlist内で参照する
+        });
   }
-  Widget showlist(String title) {
+
+  Widget showlist(String title, int idx) {
     return Container(
       decoration: new BoxDecoration(
-        border: new Border(bottom: BorderSide(color: Colors.grey, width: 3))
-      ),
-      child: ListTile(
+          border: new Border(bottom: BorderSide(color: Colors.grey, width: 3))),
+      // テキスト付きのチェックボックス
+      child: CheckboxListTile(
         title: Text(
           title,
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.black
-          ),
+          // 終了済みのタスクならタスク内容に取り消し線を引く
+          style: (flagList[idx]) ? TextStyle(decoration: TextDecoration.lineThrough, fontSize: 20, color: Colors.black) : TextStyle(fontSize: 20, color: Colors.black),
         ),
+        controlAffinity: ListTileControlAffinity.leading,
+        value: flagList[idx],
+        onChanged: (value) {
+          setState(() {
+            flagList[idx] = value;
+          });
+        },
       ),
     );
   }
 }
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
