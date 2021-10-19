@@ -92,15 +92,32 @@ class _TodoMainState extends State<TodoMain> {
     });
   }
 
+  // チェックが付いているタスクを削除
+  void _removeTodotask() {
+    setState(() {
+      for (var i = 0; i <= list.length; i++) {
+        print(i);
+        print(flagList[i]);
+        if (flagList[i] == true) {
+          list.removeAt(i);
+          flagList.removeAt(i);
+        }
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
     return Column(
       children: [
+        ElevatedButton(
+          onPressed: () => _removeTodotask(),
+          child: const Text(
+            "削除",
+            style: TextStyle(color: Colors.white, fontSize: 20.0),
+          ),
+        ),
         Expanded(child: titlelist()),
         addtext(),
-        FloatingActionButton(
-          onPressed: _addTodo,
-          child: Icon(Icons.add),
-        ),
       ],
     );
   }
@@ -143,10 +160,18 @@ class _TodoMainState extends State<TodoMain> {
         child: Column(
       children: [
         TextField(
-            enabled: true,
-            onChanged: (text) {
-              todoTitle = text;
-            }),
+          enabled: true,
+          onChanged: (text) {
+            todoTitle = text;
+          },
+          decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                color: Colors.green,
+              )),
+              fillColor: Colors.green[100],
+              filled: true),
+        ),
         ElevatedButton(
           onPressed: () => _addTodoTitle(todoTitle),
           child: const Text(
