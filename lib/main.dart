@@ -78,13 +78,13 @@ class _TodoMainState extends State<TodoMain> {
   var list = [];
   var flagList = [];
   var todoTitle;
-
+  /*
   void _addTodo() {
     setState(() {
       list.add("todo!!!");
     });
   }
-
+  */
   void _addTodoTitle(String title) {
     setState(() {
       list.add(title);
@@ -93,15 +93,21 @@ class _TodoMainState extends State<TodoMain> {
   }
 
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(child: titlelist()),
-        addtext(),
-        FloatingActionButton(
-          onPressed: _addTodo,
-          child: Icon(Icons.add),
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            height: (list.length <=10) ? 60*list.length+1: 600,
+            child: titlelist(),
+          ),
+          addtext(),
+          /*
+          FloatingActionButton(
+            onPressed: _addTodo,
+            child: Icon(Icons.add),
+          ),*/
+        ],
+      ),
     );
   }
 
@@ -115,18 +121,22 @@ class _TodoMainState extends State<TodoMain> {
 
   Widget showlist(String title, int idx) {
     return Container(
+      height: 60,
       decoration: new BoxDecoration(
           border: new Border(bottom: BorderSide(color: Colors.grey, width: 3))),
       child: CheckboxListTile(
-        title: Text(
-          title,
-          style: (flagList[idx])
+        title: Container(
+          height: 30,
+          child: Text(
+            title,
+            style: (flagList[idx])
               ? TextStyle(
                   decoration: TextDecoration.lineThrough,
                   fontSize: 20,
                   color: Colors.black)
               : TextStyle(fontSize: 20, color: Colors.black),
-        ),
+            ),
+        ) ,
         controlAffinity: ListTileControlAffinity.leading,
         value: flagList[idx],
         onChanged: (value) {
@@ -140,20 +150,22 @@ class _TodoMainState extends State<TodoMain> {
 
   Widget addtext() {
     return Container(
-        child: Column(
-      children: [
-        TextField(
-            enabled: true,
-            onChanged: (text) {
-              todoTitle = text;
-            }),
-        ElevatedButton(
-          onPressed: () => _addTodoTitle(todoTitle),
-          child: const Text(
-            "登録",
-            style: TextStyle(color: Colors.white, fontSize: 20.0),
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () => _addTodoTitle(todoTitle),
+            child: const Text(
+              "登録",
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
           ),
-        )
+          Expanded(
+            child: TextField(
+              enabled: true,
+              onChanged: (text) {
+              todoTitle = text;
+            })
+          ),
       ],
     ));
   }
