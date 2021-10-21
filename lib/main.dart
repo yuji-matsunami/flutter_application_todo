@@ -38,12 +38,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('todo'),
-        ),
-        body: TodoMain(),
-        /*body: ListView.builder(
+      home: TodoMain(),
+      /*body: ListView.builder(
           itemBuilder: (BuildContext context, int index) {
             if (index >= list.length) {
               list.addAll(["todo_add", "todo_add"]);
@@ -51,7 +47,6 @@ class MyApp extends StatelessWidget {
             return _menuItem(list[index]);
           }
         ),*/
-      ),
     );
   }
   /*
@@ -103,20 +98,53 @@ class _TodoMainState extends State<TodoMain> {
     });
   }
 
+  // チェックが付いているタスクを削除
+  void _removeTodotask() {
+    setState(() {
+      print(flagList.length);
+      for (var i = list.length - 1; i >= 0; i--) {
+        print(i);
+        print(flagList[i]);
+        if (flagList[i] == true) {
+          list.removeAt(i);
+          flagList.removeAt(i);
+        }
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('todo'),
+        actions: [
+          ElevatedButton(
+            onPressed: () => _removeTodotask(),
+            child: const Text(
+              "削除",
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
+          )
+        ],
+      ),
+      body: todobody()
+    );
+  }
+
+  Widget todobody() {
     return SingleChildScrollView(
       child: Column(
         children: [
           Container(
-            height: (list.length <=10) ? 60*list.length+1: 600,
+            height: (list.length <= 10) ? 60 * list.length + 1 : 600,
             child: titlelist(),
           ),
           addtext(),
           /*
-          FloatingActionButton(
-            onPressed: _addTodo,
-            child: Icon(Icons.add),
-          ),*/
+            FloatingActionButton(
+              onPressed: _addTodo,
+              child: Icon(Icons.add),
+            ),*/
         ],
       ),
     );
@@ -141,13 +169,13 @@ class _TodoMainState extends State<TodoMain> {
           child: Text(
             title,
             style: (flagList[idx])
-              ? TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  fontSize: 20,
-                  color: Colors.black)
-              : TextStyle(fontSize: 20, color: Colors.black),
-            ),
-        ) ,
+                ? TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: 20,
+                    color: Colors.black)
+                : TextStyle(fontSize: 20, color: Colors.black),
+          ),
+        ),
         controlAffinity: ListTileControlAffinity.leading,
         value: flagList[idx],
         onChanged: (value) {
@@ -161,22 +189,28 @@ class _TodoMainState extends State<TodoMain> {
 
   Widget addtext() {
     return Container(
-      child: Row(
-        children: [
-          ElevatedButton(
-            onPressed: () => _addTodoTitle(todoTitle),
-            child: const Text(
-              "登録",
-              style: TextStyle(color: Colors.white, fontSize: 20.0),
-            ),
+        child: Row(
+      children: [
+        ElevatedButton(
+          onPressed: () => _addTodoTitle(todoTitle),
+          child: const Text(
+            "登録",
+            style: TextStyle(color: Colors.white, fontSize: 20.0),
           ),
-          Expanded(
+        ),
+        Expanded(
             child: TextField(
-              enabled: true,
-              onChanged: (text) {
-              todoTitle = text;
-            })
-          ),
+                enabled: true,
+                onChanged: (text) {
+                  todoTitle = text;
+                },
+                decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Colors.green,
+                    )),
+                    fillColor: Colors.green[100],
+                    filled: true))),
       ],
     ));
   }
