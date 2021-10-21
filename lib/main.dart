@@ -1,7 +1,12 @@
+import 'dart:js';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+// グローバル変数で高さと横を保持
+double field_w=0.0;
+double field_h=0.0;
 
 void main() {
   debugPaintSizeEnabled = true;
@@ -12,6 +17,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    Size size = MediaQuery.of(context).size;
+    field_w = size.width;
+    var screenHeight = size.height;
+    var abovePadding = MediaQuery.of(context).top;
+    
     // var list = ["todo!","todo!","todo!","todo!","todo!","todo!"];
     return MaterialApp(
       title: 'Flutter Todo',
