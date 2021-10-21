@@ -1,4 +1,3 @@
-import 'dart:js';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -10,7 +9,13 @@ double field_h=0.0;
 
 void main() {
   debugPaintSizeEnabled = true;
-  runApp(MyApp());
+  runApp(MaterialApp(
+    title: 'Flutter Todo',
+    theme: ThemeData(
+      primarySwatch: Colors.blue,
+    ),
+    home: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,12 +23,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    // 画面サイズの計測を行う
+    // 画面の高さはpaddingとAppBarの高さを引く
     Size size = MediaQuery.of(context).size;
     field_w = size.width;
     var screenHeight = size.height;
-    var abovePadding = MediaQuery.of(context).top;
-    
+    var abovePadding = MediaQuery.of(context).padding.top;
+    var appBar = AppBar();
+    var appBarHeight = appBar.preferredSize.height;
+    field_h = screenHeight - abovePadding - appBarHeight;
+
     // var list = ["todo!","todo!","todo!","todo!","todo!","todo!"];
+    return TodoMain();
+
+    /*
     return MaterialApp(
       title: 'Flutter Todo',
       theme: ThemeData(
@@ -48,6 +61,7 @@ class MyApp extends StatelessWidget {
           }
         ),*/
     );
+    */
   }
   /*
   Widget _menuItem(String title) {
@@ -136,7 +150,7 @@ class _TodoMainState extends State<TodoMain> {
       child: Column(
         children: [
           Container(
-            height: (list.length <= 10) ? 60 * list.length + 1 : 600,
+            height: (list.length <= 9) ? field_h/10 * list.length + 1 : field_h/10*9,
             child: titlelist(),
           ),
           addtext(),
@@ -160,7 +174,7 @@ class _TodoMainState extends State<TodoMain> {
 
   Widget showlist(String title, int idx) {
     return Container(
-      height: 60,
+      height: field_h/10,
       decoration: new BoxDecoration(
           border: new Border(bottom: BorderSide(color: Colors.grey, width: 3))),
       child: CheckboxListTile(
