@@ -98,6 +98,7 @@ class _TodoMainState extends State<TodoMain> {
   var list = [];
   var flagList = [];
   var todoTitle;
+  final TextEditingController _textEditingController = new TextEditingController();
   /*
   void _addTodo() {
     setState(() {
@@ -109,6 +110,7 @@ class _TodoMainState extends State<TodoMain> {
     setState(() {
       list.add(title);
       flagList.add(false);
+      _textEditingController.clear();
     });
   }
 
@@ -224,8 +226,11 @@ class _TodoMainState extends State<TodoMain> {
                       color: Colors.green,
                     )),
                     fillColor: Colors.green[100],
-                    filled: true))),
-      ],
+                    filled: true),
+                controller: _textEditingController,
+            )
+      ),
+    ],
     ));
   }
 }
